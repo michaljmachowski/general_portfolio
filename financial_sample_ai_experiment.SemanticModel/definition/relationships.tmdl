@@ -1,0 +1,20 @@
+relationship Sales_Date
+	fromColumn: FCT_Sales.Date
+	toColumn: DIM_Date.Date
+
+relationship FCT_Sales_SegmentKey_DIM_Segment_SegmentKey
+	fromColumn: FCT_Sales.SegmentKey
+	toColumn: DIM_Segment.SegmentKey
+
+relationship FCT_Sales_CountryKey_DIM_Country_CountryKey
+	fromColumn: FCT_Sales.CountryKey
+	toColumn: DIM_Country.CountryKey
+
+relationship FCT_Sales_ProductKey_DIM_Product_ProductKey
+	fromColumn: FCT_Sales.ProductKey
+	toColumn: DIM_Product.ProductKey
+
+relationship FCT_Sales_DiscountKey_DIM_DiscountBand_DiscountKey
+	fromColumn: FCT_Sales.DiscountKey
+	toColumn: DIM_DiscountBand.DiscountKey
+

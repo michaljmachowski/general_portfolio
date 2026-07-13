@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "financial_sample_ai_experiment"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "1c532580-68cd-4dd5-ba84-9f79d635d9c0"
+  }
+}

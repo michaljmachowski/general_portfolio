@@ -1,0 +1,82 @@
+table DIM_Date
+	lineageTag: 1d9d6b73-2cbd-4f8b-85f9-fefcc8ba6061
+
+	column Date
+		displayFolder: Date Hierarchy
+		lineageTag: de859ab4-05a6-4884-943b-9aca958ffe2b
+		isNameInferred
+		sourceColumn: [Date]
+
+	column Year
+		displayFolder: Date Hierarchy
+		lineageTag: 9483d076-8f46-4275-aadf-2c27eb24a7dc
+		isNameInferred
+		sourceColumn: [Year]
+
+	column Quarter
+		displayFolder: Date Hierarchy
+		lineageTag: 05a011c8-d47e-4506-9ba3-90152f38fd64
+		isNameInferred
+		sourceColumn: [Quarter]
+
+	column 'Month Number'
+		isHidden
+		displayFolder: Date Hierarchy
+		lineageTag: 7c39d642-21bb-4114-8ef8-4a60c61035f7
+		isNameInferred
+		sourceColumn: [Month Number]
+
+	column 'Month Name'
+		displayFolder: Date Hierarchy
+		lineageTag: 622b9159-69c9-473f-bd1d-96b6c35efde9
+		isNameInferred
+		sourceColumn: [Month Name]
+		sortByColumn: 'Month Number'
+
+	column 'Day Name'
+		displayFolder: Date Hierarchy
+		lineageTag: 91412709-4223-4ebf-a643-d74c09737876
+		isNameInferred
+		sourceColumn: [Day Name]
+
+	column 'Day of Month'
+		lineageTag: 1670116f-b882-44f2-8946-f1fb6c777ca9
+		isNameInferred
+		sourceColumn: [Day of Month]
+
+	column 'Week Number'
+		isHidden
+		displayFolder: Date Hierarchy
+		lineageTag: 5c514871-6d0f-41ec-8f33-deab75d8da6d
+		isNameInferred
+		sourceColumn: [Week Number]
+
+	column Year-Month
+		lineageTag: 4e41de38-6078-4ebc-b6fd-12f1e9c8aadc
+		isNameInferred
+		sourceColumn: [Year-Month]
+
+	column Year-Quarter
+		lineageTag: bce895a5-ad26-4908-8bb8-99a52f4782c4
+		isNameInferred
+		sourceColumn: [Year-Quarter]
+
+	partition Date = calculated
+		mode: import
+		source =
+				VAR MinDate = DATE(2013, 1, 1)
+				VAR MaxDate = DATE(2015, 12, 31)
+				RETURN
+				ADDCOLUMNS(
+				    CALENDAR(MinDate, MaxDate),
+				    "Year", YEAR([Date]),
+				    "Quarter", "Q" & ROUNDUP(MONTH([Date])/3, 0),
+				    "Month Number", MONTH([Date]),
+				    "Month Name", FORMAT([Date], "mmmm"),
+				    "Day Name", FORMAT([Date], "dddd"),
+				    "Day of Month", DAY([Date]),
+				    "Week Number", WEEKNUM([Date]),
+				    "Year-Month", FORMAT([Date], "yyyy-mm"),
+				    "Year-Quarter", FORMAT([Date], "yyyy") & "-" & "Q" & ROUNDUP(MONTH([Date])/3, 0)
+				)
+

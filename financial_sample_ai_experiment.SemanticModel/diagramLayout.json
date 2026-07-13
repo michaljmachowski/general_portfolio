@@ -1,0 +1,113 @@
+{
+  "version": "1.1.0",
+  "diagrams": [
+    {
+      "ordinal": 0,
+      "scrollPosition": {
+        "x": 0,
+        "y": 0
+      },
+      "nodes": [
+        {
+          "location": {
+            "x": 1137.0000000000011,
+            "y": 799.99999999999943
+          },
+          "nodeIndex": "_Measures",
+          "nodeLineageTag": "e17a708b-5377-43c0-ac4f-a5a94a1f5b29",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 0,
+            "y": 86
+          },
+          "nodeIndex": "DIM_Country",
+          "nodeLineageTag": "68ac0353-1985-473f-9787-0d098e49a98c",
+          "size": {
+            "height": 128,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1158.0000000000009,
+            "y": 81.999999999999929
+          },
+          "nodeIndex": "DIM_Date",
+          "nodeLineageTag": "1d9d6b73-2cbd-4f8b-85f9-fefcc8ba6061",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 284,
+            "y": 86
+          },
+          "nodeIndex": "DIM_DiscountBand",
+          "nodeLineageTag": "db510f22-4cd8-41d6-9456-3ea334eb3782",
+          "size": {
+            "height": 128,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 568,
+            "y": 86
+          },
+          "nodeIndex": "DIM_Product",
+          "nodeLineageTag": "1029949c-ab8f-408d-9783-8d93309f8945",
+          "size": {
+            "height": 128,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 852,
+            "y": 86
+          },
+          "nodeIndex": "DIM_Segment",
+          "nodeLineageTag": "40d5a4b2-37fe-4c7d-a712-fe356f7cd9f5",
+          "size": {
+            "height": 128,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 0,
+            "y": 385.99999999999972
+          },
+          "nodeIndex": "FCT_Sales",
+          "nodeLineageTag": "f9b1194d-15d7-4cff-b236-70d2ee512a59",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        }
+      ],
+      "name": "All tables",
+      "zoomValue": 89.192590520569539,
+      "pinKeyFieldsToTop": false,
+      "showExtraHeaderInfo": false,
+      "hideKeyFieldsWhenCollapsed": false,
+      "tablesLocked": false
+    }
+  ],
+  "selectedDiagram": "All tables",
+  "defaultDiagram": "All tables"
+}
