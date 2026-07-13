@@ -1,0 +1,92 @@
+table _Measures
+	lineageTag: e17a708b-5377-43c0-ac4f-a5a94a1f5b29
+
+	measure 'Total Revenue' = SUMX(FCT_Sales, FCT_Sales[Gross Sales] - FCT_Sales[Discounts])
+		formatString: $#,##0.00
+		displayFolder: Core Measures\Sales Metrics
+		lineageTag: 806dcda5-e884-4689-a255-4f02672c241a
+
+	measure 'Total Units' = SUM(FCT_Sales[Units Sold])
+		formatString: #,##0
+		displayFolder: Core Measures\Sales Metrics
+		lineageTag: 5a1e38bb-baeb-4d5a-ad48-20f20a8ea166
+
+	measure 'Gross Sales' = SUM(FCT_Sales[Gross Sales])
+		formatString: $#,##0.00
+		displayFolder: Core Measures\Sales Metrics
+		lineageTag: b46b129b-446d-42a9-831a-b5d2c9d37ab1
+
+	measure 'Total Discounts' = SUM(FCT_Sales[Discounts])
+		formatString: $#,##0.00
+		displayFolder: Core Measures\Sales Metrics
+		lineageTag: 138af5e0-e792-4f0f-b201-9ef13d3a7a00
+
+	measure 'Total Cost' = SUMX(FCT_Sales, FCT_Sales[COGS])
+		formatString: $#,##0.00
+		displayFolder: Core Measures\Profitability
+		lineageTag: eb54bbc5-7dbc-460a-b86b-395a3c45bed4
+
+	measure 'Total Profit' = [Total Revenue] - [Total Cost]
+		formatString: $#,##0.00
+		displayFolder: Core Measures\Profitability
+		lineageTag: f577528c-bc82-4eff-b00d-f4279e4fbc99
+
+	measure 'Profit Margin %' = DIVIDE([Total Profit], [Total Revenue], 0)
+		formatString: 0.00%
+		displayFolder: Core Measures\Profitability
+		lineageTag: 6bf8ee36-8208-44fd-9393-a1972c214633
+
+	measure 'Discount %' = DIVIDE([Total Discounts], [Gross Sales], 0)
+		formatString: 0.00%
+		displayFolder: Core Measures\Profitability
+		lineageTag: 3d10b8ac-e472-4a8c-bea6-339b136fa47f
+
+	measure 'Revenue YTD' = CALCULATE([Total Revenue], DATESYTD(DIM_Date[Date]))
+		formatString: $#,##0.00
+		displayFolder: Time Intelligence\Year-to-Date
+		lineageTag: 148ee547-3333-4737-9ef6-4088391f9cfd
+
+	measure 'Profit YTD' = CALCULATE([Total Profit], DATESYTD(DIM_Date[Date]))
+		formatString: $#,##0.00
+		displayFolder: Time Intelligence\Year-to-Date
+		lineageTag: f548de74-a187-49fe-8877-1ca09d90d709
+
+	measure 'Revenue MTD' = CALCULATE([Total Revenue], DATESMTD(DIM_Date[Date]))
+		formatString: $#,##0.00
+		displayFolder: Time Intelligence\Month-to-Date
+		lineageTag: 9170e75c-8579-493b-8c4a-42cf29cfefc9
+
+	measure 'Profit MTD' = CALCULATE([Total Profit], DATESMTD(DIM_Date[Date]))
+		formatString: $#,##0.00
+		displayFolder: Time Intelligence\Month-to-Date
+		lineageTag: da653a2d-41fc-4e2d-b6e1-8e04876aabd1
+
+	measure 'Revenue PY' = CALCULATE([Total Revenue], SAMEPERIODLASTYEAR(DIM_Date[Date]))
+		formatString: $#,##0.00
+		displayFolder: Time Intelligence\Year-over-Year
+		lineageTag: 5eb1acd6-9b0c-4232-aae6-2b8e689270b7
+
+	measure 'Profit PY' = CALCULATE([Total Profit], SAMEPERIODLASTYEAR(DIM_Date[Date]))
+		formatString: $#,##0.00
+		displayFolder: Time Intelligence\Year-over-Year
+		lineageTag: f626748b-18ba-4bb1-8b99-dcee3a601dca
+
+	measure 'Revenue Growth %' = DIVIDE([Total Revenue] - [Revenue PY], [Revenue PY], 0)
+		formatString: 0.00%
+		displayFolder: Time Intelligence\Growth Analysis
+		lineageTag: 5efbb418-40a6-4b08-8771-2706eb1da286
+
+	measure 'Profit Growth %' = DIVIDE([Total Profit] - [Profit PY], [Profit PY], 0)
+		formatString: 0.00%
+		displayFolder: Time Intelligence\Growth Analysis
+		lineageTag: 2b1e85e7-9072-4a0a-acaa-6af5f9fd8572
+
+	column MeasureCategory
+		lineageTag: 1a8e6e1f-6cee-4491-8747-e2cbc417f46d
+		isNameInferred
+		sourceColumn: [MeasureCategory]
+
+	partition _Measures = calculated
+		mode: import
+		source = DATATABLE("MeasureCategory", STRING, {{"Core Measures"}, {"Time Intelligence"}, {"Ratios & Percentages"}})
+

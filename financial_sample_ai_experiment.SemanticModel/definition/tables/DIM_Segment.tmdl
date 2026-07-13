@@ -1,0 +1,25 @@
+table DIM_Segment
+	lineageTag: 40d5a4b2-37fe-4c7d-a712-fe356f7cd9f5
+
+	column SegmentKey
+		dataType: int64
+		lineageTag: 2e797461-5c1b-4848-94ae-b6a1595a91cc
+		sourceColumn: SegmentKey
+
+	column Segment
+		dataType: string
+		lineageTag: f957b5d2-4902-44f2-9327-94ad347bb735
+		sourceColumn: Segment
+
+	partition DIM_Segment = m
+		mode: import
+		source =
+				let
+				    Source = Raw_Sales,
+				    #"Removed Other Columns" = Table.SelectColumns(Source, {"Segment"}),
+				    #"Removed Duplicates" = Table.Distinct(#"Removed Other Columns"),
+				    #"Sorted Rows" = Table.Sort(#"Removed Duplicates", {{"Segment", Order.Ascending}}),
+				    #"Added Index" = Table.AddIndexColumn(#"Sorted Rows", "SegmentKey", 1, 1, Int64.Type)
+				in
+				    #"Added Index"
+

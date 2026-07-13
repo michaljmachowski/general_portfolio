@@ -1,0 +1,151 @@
+table FCT_Sales
+	lineageTag: f9b1194d-15d7-4cff-b236-70d2ee512a59
+
+	column 'Units Sold'
+		dataType: double
+		displayFolder: Transaction Details
+		lineageTag: 41c5932b-7b1c-4952-a30f-9b7d67bee988
+		summarizeBy: sum
+		sourceColumn: Units Sold
+
+	column 'Manufacturing Price'
+		dataType: double
+		isHidden
+		displayFolder: Transaction Details
+		lineageTag: b2ce2aa2-377d-4f5e-85bd-0169222c40e3
+		summarizeBy: average
+		sourceColumn: Manufacturing Price
+
+	column 'Sale Price'
+		dataType: double
+		isHidden
+		displayFolder: Transaction Details
+		lineageTag: 3d8252c4-5fac-4666-9f21-8dccbe840b85
+		summarizeBy: average
+		sourceColumn: Sale Price
+
+	column 'Gross Sales'
+		dataType: decimal
+		formatString: $#,##0.00
+		displayFolder: Sales Metrics
+		lineageTag: d50a360c-8f9b-458b-a9d5-a24c44ca75df
+		summarizeBy: sum
+		sourceColumn: Gross Sales
+
+	column Discounts
+		dataType: decimal
+		formatString: $#,##0.00
+		displayFolder: Sales Metrics
+		lineageTag: b31974cc-2f00-45c9-8b15-bd73035ce9d7
+		summarizeBy: sum
+		sourceColumn: Discounts
+
+	column ' Sales'
+		dataType: decimal
+		formatString: $#,##0.00
+		displayFolder: Sales Metrics
+		lineageTag: 1958d8d4-66df-4be1-98d5-28597a5229f2
+		summarizeBy: sum
+		sourceColumn: " Sales"
+
+	column COGS
+		dataType: decimal
+		formatString: $#,##0.00
+		displayFolder: Sales Metrics
+		lineageTag: f6ca219f-be09-4612-ac1e-bf08f30215a1
+		summarizeBy: sum
+		sourceColumn: COGS
+
+	column Profit
+		dataType: decimal
+		formatString: $#,##0.00
+		displayFolder: Sales Metrics
+		lineageTag: c5e934b2-5728-4c6d-bd53-8cff77f4fcae
+		summarizeBy: sum
+		sourceColumn: Profit
+
+	column Date
+		dataType: dateTime
+		isHidden
+		displayFolder: Transaction Details
+		lineageTag: d18dfc46-8638-4ee3-90b4-7139abc77be0
+		summarizeBy: none
+		sourceColumn: Date
+
+	column 'Month Number'
+		dataType: int64
+		isHidden
+		displayFolder: Transaction Details
+		lineageTag: 9c977a93-3ee8-46c8-b7b1-df352fe4573e
+		summarizeBy: none
+		sourceColumn: Month Number
+
+	column 'Month Name'
+		dataType: string
+		isHidden
+		displayFolder: Transaction Details
+		lineageTag: 16e027e0-ac0c-40c3-97bd-7d2036e22847
+		summarizeBy: none
+		sourceColumn: Month Name
+
+	column Year
+		dataType: string
+		isHidden
+		displayFolder: Transaction Details
+		lineageTag: d517377e-9dce-419f-9363-4f9c89370142
+		summarizeBy: none
+		sourceColumn: Year
+
+	column SegmentKey
+		dataType: int64
+		isHidden
+		displayFolder: Transaction Details
+		lineageTag: 24a1b78c-dd6b-420f-bf11-46eaad9481e3
+		summarizeBy: none
+		sourceColumn: SegmentKey
+
+	column CountryKey
+		dataType: int64
+		isHidden
+		displayFolder: Transaction Details
+		lineageTag: 26a2549d-47e6-42b2-bbe4-408c77a27296
+		summarizeBy: none
+		sourceColumn: CountryKey
+
+	column ProductKey
+		dataType: int64
+		isHidden
+		displayFolder: Transaction Details
+		lineageTag: 2d08b227-05d0-4b97-b3d8-7b348237b853
+		summarizeBy: none
+		sourceColumn: ProductKey
+
+	column DiscountKey
+		dataType: int64
+		isHidden
+		displayFolder: Transaction Details
+		lineageTag: 57ac5906-a20b-4486-822b-79ef785ef667
+		summarizeBy: none
+		sourceColumn: DiscountKey
+
+	partition FCT_Sales = m
+		mode: import
+		source =
+				let
+				    Source = Raw_Sales,
+				    #"Merged Segment" = Table.NestedJoin(Source, {"Segment"}, DIM_Segment, {"Segment"}, "SegmentDim", JoinKind.LeftOuter),
+				    #"Expanded SegmentDim" = Table.ExpandTableColumn(#"Merged Segment", "SegmentDim", {"SegmentKey"}, {"SegmentKey"}),
+				    #"Removed Segment" = Table.RemoveColumns(#"Expanded SegmentDim", {"Segment"}),
+				    #"Merged Country" = Table.NestedJoin(#"Removed Segment", {"Country"}, DIM_Country, {"Country"}, "CountryDim", JoinKind.LeftOuter),
+				    #"Expanded CountryDim" = Table.ExpandTableColumn(#"Merged Country", "CountryDim", {"CountryKey"}, {"CountryKey"}),
+				    #"Removed Country" = Table.RemoveColumns(#"Expanded CountryDim", {"Country"}),
+				    #"Merged Product" = Table.NestedJoin(#"Removed Country", {"Product"}, DIM_Product, {"Product"}, "ProductDim", JoinKind.LeftOuter),
+				    #"Expanded ProductDim" = Table.ExpandTableColumn(#"Merged Product", "ProductDim", {"ProductKey"}, {"ProductKey"}),
+				    #"Removed Product" = Table.RemoveColumns(#"Expanded ProductDim", {"Product"}),
+				    #"Merged DiscountBand" = Table.NestedJoin(#"Removed Product", {"Discount Band"}, DIM_DiscountBand, {"Discount Band"}, "DiscountBandDim", JoinKind.LeftOuter),
+				    #"Expanded DiscountBandDim" = Table.ExpandTableColumn(#"Merged DiscountBand", "DiscountBandDim", {"DiscountKey"}, {"DiscountKey"}),
+				    #"Removed DiscountBand" = Table.RemoveColumns(#"Expanded DiscountBandDim", {"Discount Band"}),
+				    #"Reordered Columns" = Table.ReorderColumns(#"Removed DiscountBand", {"SegmentKey", "CountryKey", "ProductKey", "DiscountKey", "Units Sold", "Manufacturing Price", "Sale Price", "Gross Sales", "Discounts", " Sales", "COGS", "Profit", "Date", "Month Number", "Month Name", "Year"})
+				in
+				    #"Reordered Columns"
+

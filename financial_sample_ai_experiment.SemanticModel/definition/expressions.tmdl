@@ -1,0 +1,11 @@
+/// Shared staging query loading the raw Excel data once. FCT_Sales and all DIM_* tables branch from this, avoiding circular references between fact and dimension queries.
+expression Raw_Sales =
+		let
+		    Source = Excel.Workbook(File.Contents("C:\Users\micha\power_bi_experiments\Financial Sample.xlsx"), null, true),
+		    Sheet1_Data = Source{[Item="Sheet1",Kind="Sheet"]}[Data],
+		    #"Promoted Headers" = Table.PromoteHeaders(Sheet1_Data, [PromoteAllScalars=true]),
+		    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"Segment", type text}, {"Country", type text}, {"Product", type text}, {"Discount Band", type text}, {"Units Sold", type number}, {"Manufacturing Price", type number}, {"Sale Price", type number}, {"Gross Sales", type number}, {"Discounts", type number}, {" Sales", type number}, {"COGS", type number}, {"Profit", type number}, {"Date", type date}, {"Month Number", type number}, {"Month Name", type text}, {"Year", type text}})
+		in
+		    #"Changed Type"
+	lineageTag: a8e2b430-3ce6-4255-b27e-9daa183711f1
+

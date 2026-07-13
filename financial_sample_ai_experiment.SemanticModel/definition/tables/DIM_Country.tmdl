@@ -1,0 +1,25 @@
+table DIM_Country
+	lineageTag: 68ac0353-1985-473f-9787-0d098e49a98c
+
+	column CountryKey
+		dataType: int64
+		lineageTag: 442f82f5-810d-4016-ba20-fd42bbf5f29f
+		sourceColumn: CountryKey
+
+	column Country
+		dataType: string
+		lineageTag: b04f7eec-4872-473c-9dfd-23404bc59360
+		sourceColumn: Country
+
+	partition DIM_Country = m
+		mode: import
+		source =
+				let
+				    Source = Raw_Sales,
+				    #"Removed Other Columns" = Table.SelectColumns(Source, {"Country"}),
+				    #"Removed Duplicates" = Table.Distinct(#"Removed Other Columns"),
+				    #"Sorted Rows" = Table.Sort(#"Removed Duplicates", {{"Country", Order.Ascending}}),
+				    #"Added Index" = Table.AddIndexColumn(#"Sorted Rows", "CountryKey", 1, 1, Int64.Type)
+				in
+				    #"Added Index"
+

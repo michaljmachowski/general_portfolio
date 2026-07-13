@@ -1,0 +1,25 @@
+table DIM_Product
+	lineageTag: 1029949c-ab8f-408d-9783-8d93309f8945
+
+	column ProductKey
+		dataType: int64
+		lineageTag: 12df6102-3587-4bb0-a28b-269ef711a502
+		sourceColumn: ProductKey
+
+	column Product
+		dataType: string
+		lineageTag: 168a20ca-64ce-404d-b1f7-7aff816ffb56
+		sourceColumn: Product
+
+	partition DIM_Product = m
+		mode: import
+		source =
+				let
+				    Source = Raw_Sales,
+				    #"Removed Other Columns" = Table.SelectColumns(Source, {"Product"}),
+				    #"Removed Duplicates" = Table.Distinct(#"Removed Other Columns"),
+				    #"Sorted Rows" = Table.Sort(#"Removed Duplicates", {{"Product", Order.Ascending}}),
+				    #"Added Index" = Table.AddIndexColumn(#"Sorted Rows", "ProductKey", 1, 1, Int64.Type)
+				in
+				    #"Added Index"
+

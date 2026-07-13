@@ -1,0 +1,25 @@
+table DIM_DiscountBand
+	lineageTag: db510f22-4cd8-41d6-9456-3ea334eb3782
+
+	column DiscountKey
+		dataType: int64
+		lineageTag: 82802311-f212-447c-b933-5f425c06c42f
+		sourceColumn: DiscountKey
+
+	column 'Discount Band'
+		dataType: string
+		lineageTag: 5e1a6fa2-d508-44ba-9859-6e84b85ab3dd
+		sourceColumn: Discount Band
+
+	partition DIM_DiscountBand = m
+		mode: import
+		source =
+				let
+				    Source = Raw_Sales,
+				    #"Removed Other Columns" = Table.SelectColumns(Source, {"Discount Band"}),
+				    #"Removed Duplicates" = Table.Distinct(#"Removed Other Columns"),
+				    #"Sorted Rows" = Table.Sort(#"Removed Duplicates", {{"Discount Band", Order.Ascending}}),
+				    #"Added Index" = Table.AddIndexColumn(#"Sorted Rows", "DiscountKey", 1, 1, Int64.Type)
+				in
+				    #"Added Index"
+
